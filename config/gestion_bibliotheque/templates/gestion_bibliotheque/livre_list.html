@@ -1,0 +1,87 @@
+{% extends "bibliotheque/base.html" %}
+
+{% block title %}Catalogue des livres{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">Catalogue des livres</h1>
+    <a href="{% url 'livre_create' %}" class="btn btn-primary">+ Ajouter un livre</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <select name="categorie" class="form-select" onchange="this.form.submit()">
+            <option value="">Toutes les catégories</option>
+            {% for cat in categories %}
+                <option value="{{ cat.pk }}"
+                    {% if cat.pk|stringformat:"s" == categorie_active %}selected{% endif %}>
+                    {{ cat.nom }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-5">
+        <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Titre ou auteur">
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-outline-secondary">Filtrer</button>
+        <a href="{% url 'livre_list' %}" class="btn btn-link">Réinitialiser</a>
+    </div>
+</form>
+
+<table class="table table-hover align-middle bg-white">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Catégorie</th>
+            <th>Disponibilité</th>
+            <th class="text-end">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for livre in livres %}
+        <tr>
+            <td><a href="{{ livre.get_absolute_url }}">{{ livre.titre }}</a></td>
+            <td>{{ livre.auteur }}</td>
+            <td>{{ livre.categorie.nom }}</td>
+            <td>
+                {% if livre.disponible %}
+                    <span class="badge bg-success">Disponible</span>
+                {% else %}
+                    <span class="badge bg-danger">Emprunté</span>
+                {% endif %}
+            </td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'livre_update' livre.pk %}">Modifier</a>
+                <a class="btn btn-sm btn-outline-danger" href="{% url 'livre_delete' livre.pk %}">Supprimer</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="5" class="text-center text-muted">Aucun livre trouvé.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">Précédent</a>
+            </li>
+        {% endif %}
+        <li class="page-item disabled">
+            <span class="page-link">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        </li>
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Suivant</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
