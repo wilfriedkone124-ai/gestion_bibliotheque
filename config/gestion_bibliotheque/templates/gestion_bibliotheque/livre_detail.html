@@ -1,0 +1,27 @@
+{% extends "bibliotheque/base.html" %}
+
+{% block title %}{{ object.titre }}{% endblock %}
+
+{% block content %}
+<div class="card card-body">
+    <h1 class="h3">{{ object.titre }}</h1>
+    <p class="mb-1"><b>Auteur :</b> {{ object.auteur }}</p>
+    <p class="mb-1"><b>Catégorie :</b> {{ object.categorie.nom }}</p>
+    <p><b>Disponibilité :</b>
+        {% if object.disponible %}
+            <span class="badge bg-success">Disponible</span>
+        {% else %}
+            <span class="badge bg-danger">Emprunté</span>
+        {% endif %}
+    </p>
+    <div class="d-flex gap-2">
+        <form method="post" action="{% url 'livre_toggle' object.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-outline-secondary">Basculer la disponibilité</button>
+        </form>
+        <a class="btn btn-outline-primary" href="{% url 'livre_update' object.pk %}">Modifier</a>
+        <a class="btn btn-outline-danger" href="{% url 'livre_delete' object.pk %}">Supprimer</a>
+        <a class="btn btn-link" href="{% url 'livre_list' %}">Retour à la liste</a>
+    </div>
+</div>
+{% endblock %}

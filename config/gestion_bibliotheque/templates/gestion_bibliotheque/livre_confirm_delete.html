@@ -1,0 +1,16 @@
+{% extends "bibliotheque/base.html" %}
+
+{% block title %}Supprimer le livre{% endblock %}
+
+{% block content %}
+<div class="card card-body">
+    <h1 class="h4">Supprimer ce livre ?</h1>
+    <p>Vous allez supprimer <b>{{ object.titre }}</b> ({{ object.auteur }}). 
+       Cette action est définitive.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+        <a href="{% url 'livre_list' %}" class="btn btn-link">Annuler</a>
+    </form>
+</div>
+{% endblock %}
