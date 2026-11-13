@@ -8,7 +8,7 @@ from .forms import LivreForm
 from .models import Categorie, Livre
 class LivreListView(ListView):
     model = Livre
-    template_name = "bibliotheque/livre_list.html"
+    template_name = "gestion_bibliotheque/livre_list.html"
     context_object_name = "livres"
     paginate_by = 10
     def get_queryset(self):
@@ -31,11 +31,11 @@ class LivreListView(ListView):
         return ctx
 class LivreDetailView(DetailView):
     model = Livre
-    template_name = "bibliotheque/livre_detail.html"
+    template_name = "gestion_bibliotheque/livre_detail.html"
 class LivreCreateView(CreateView):
     model = Livre
-        form_class = LivreForm
-    template_name = "bibliotheque/livre_form.html"
+    form_class = LivreForm
+    template_name = "gestion_bibliotheque/livre_form.html"
     success_url = reverse_lazy("livre_list")
     def form_valid(self, form):
         messages.success(self.request, "Le livre a été ajouté.")
@@ -43,14 +43,14 @@ class LivreCreateView(CreateView):
 class LivreUpdateView(UpdateView):
     model = Livre
     form_class = LivreForm
-    template_name = "bibliotheque/livre_form.html"
+    template_name = "gestion_bibliotheque/livre_form.html"
     success_url = reverse_lazy("livre_list")
     def form_valid(self, form):
         messages.success(self.request, "Le livre a été modifié.")
         return super().form_valid(form)
 class LivreDeleteView(DeleteView):
     model = Livre
-    template_name = "bibliotheque/livre_confirm_delete.html"
+    template_name = "gestion_bibliotheque/livre_confirm_delete.html"
     success_url = reverse_lazy("livre_list")
     def form_valid(self, form):
         messages.success(self.request, "Le livre a été supprimé.")
